@@ -12,14 +12,6 @@ from datetime import datetime, timedelta
 random.seed(42)
 
 #---------------
-class NytManager(self,API_Rules.nyt_total_daily_calls):
-    # First define initial settings upon creation
-    def __init__(self):
-        self.query_count = 0 # This is a count of the number of requests performed, reset on a new calendar date
-        self.rate_limit = API_Rules.nyt_total_daily_calls #limit in a calendar day
-        self.wait_sec = 
-        self.
-
 
 class ApiHandler(): 
     # import of requests
@@ -27,11 +19,38 @@ class ApiHandler():
     # from datetime import datetime 
     def __init__(self):
         self.query_count = 0 # This is a count of the number of queries performed, reset on a new calendar date
-        self.rate_limit = API_Rules.nyt_total_daily_calls #100,000
+
+        # Instances from API_Rules file
+        self.rate_per_min = API_Rules.nyt_per_min #5
+        self.wait = API_Rules.nyt_wait_per_call_seconds #12
+        self.rate_limit = API_Rules.nyt_total_daily_calls #500
+        
+        # Keep track of dates when ran 
         self.last_date = datetime.now()
-        self.permission = True
         self.start_time = datetime.now()
+
+        # Keep track of pagination
+        self.total_pages_in_query = 0
+        self.last_completed_page = 0
+        self.next_page = 0
+        self.current_holding = ""
+
+        # Deepnote specific limitations
         self.deepnote_active_limit = 23.5
+
+        # Are Queries allowed flag
+        self.permission = False
+    
+    # Saving & Load Pickle Files pickle files
+    def save_progress(self,filepath):
+        with open(filepath,'wb') as filepickle:
+            pickle.dump(self,filepickle)
+    
+    @classmethod
+    def load_pickle(cls,filepath):
+        with open(filepath,'rb') as filepickle:
+            save = pickle.load(filepickle)
+        return save
 
     def check_permission(self):
         # A method that checks whether a request should be made
