@@ -4,7 +4,7 @@ import API_Rules # To get API numbers
 import os
 
 class NytQueryBuilder():
-    def build_query(self,holding=None,begin_date=None,end_date=None,page=1):
+    def build_query(self,holding=None,begin_date=None,end_date=None,page=0):
 
         nyt_url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?"
         # If no holding specified, then nothing to build
@@ -27,7 +27,7 @@ class NytQueryBuilder():
         # Next, keep things as the business desk for now
         nyt_url = nyt_url + f'&fq=news_desk:("Business")'
 
-        # if a page is given
+        # if a page is given, 0 indexed
         nyt_url = nyt_url + f"&page={page}"
 
         #sort
