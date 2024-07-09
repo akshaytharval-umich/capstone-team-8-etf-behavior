@@ -1,19 +1,13 @@
 import requests
 import json
-import re
-import random
 import pickle
-import pandas as pd
 import time
 import API_Rules # To get API numbers
 from datetime import datetime, timedelta
 
-#set a random seed for testing
-random.seed(42)
-
 #---------------
 
-class ApiHandler(): 
+class NytManager(): 
     # import of requests
     # f"https://api.nytimes.com/svc/search/v2/articlesearch.json?"
     # from datetime import datetime 
@@ -118,3 +112,4 @@ class ApiHandler():
             # False, then do not make request, return a False
             print("No permission to request currently")
             return ("NOT PERMITTED",False)
+
