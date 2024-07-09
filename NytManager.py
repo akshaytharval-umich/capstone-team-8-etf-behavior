@@ -21,13 +21,16 @@ class ApiHandler():
         self.query_count = 0 # This is a count of the number of queries performed, reset on a new calendar date
 
         # Instances from API_Rules file
-        self.rate_per_min = API_Rules.nyt_per_min #5
-        self.wait = API_Rules.nyt_wait_per_call_seconds #12
-        self.rate_limit = API_Rules.nyt_total_daily_calls #500
+        self.call_limit = API_Rules.nyt_total_daily_calls #500
         
-        # Keep track of dates when ran 
+        # Keep track of dates
         self.last_date = datetime.now()
-        self.start_time = datetime.now()
+        
+        # Keep track of time elapsed
+        self.bucket_start = datetime.now()
+        self.bucket_count = 0
+        self.bucket_limit = API_Rules.nyt_per_min #5
+        self.wait = API_Rules.nyt_wait_per_call_seconds #12
 
         # Keep track of pagination
         self.total_pages_in_query = 0
@@ -36,6 +39,7 @@ class ApiHandler():
         self.current_holding = ""
 
         # Deepnote specific limitations
+        self.deepnote_start_time = datetime.now()
         self.deepnote_active_limit = 23.5
 
         # Are Queries allowed flag
@@ -60,9 +64,12 @@ class ApiHandler():
             self.last_date = datetime.now()
             # Additionally, reset the query_count
             self.query_count = 0
+            self.bucket_count = 0
+            self.bucket_start = datetime.now()
             return True
-        elif self.query_count <= self.rate_limit:
-            # Currently, underneath the limit
+        elif (self.query_count <= self.call_limit)\
+            and (self.bucket_count <= self.bucket_limit):
+                # Currently, underneath the limit
             return True
         else:
             # Currently, above the limit
@@ -72,19 +79,28 @@ class ApiHandler():
     def submit_query(self,query):
         # First check that there is permission to make a request
         self.permission = self.check_permission()
-        # Check if 23.5 hours has passed
-        elapsed_time = datetime.now() - self.start_time
+        # Check if 23.5 hours has passed, hence save and exit
+        elapsed_time = datetime.now() - self.deepnote_start_time
         elapsed_hours = elapsed_time.total_seconds()/3600
         if elapsed_hours >= self.deepnote_active_limit:
             print("MAX 23.5 HOURS REACHED")
             return ("LIMIT REACHED",429)
         if self.permission == True:
             # True, then make request
-            # But wait for at least 1 second
-            time.sleep(5)
+            # But wait for at least 12 seconds
+            time.sleep(self.wait)
             response = requests.get(query)
+
             # Update the counter
             self.query_count = self.query_count + 1
+            self.bucket_count = self.bucket_count + 1
+
+            # Check for bucket timing
+            if (datetime.now() - self.bucket_start) > timedelta(minutes=5):
+                # longer than 5 minutes, reset
+                self.bucket_start = datetime.now()
+                self.bucket_count = 0
+
             # Check if the response was successful
             if response.status_code == 200:
                 # With success return the response as a dictionary
