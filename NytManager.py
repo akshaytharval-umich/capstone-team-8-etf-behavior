@@ -2,7 +2,6 @@ import requests
 import json
 import pickle
 import time
-#from API_Rules import * # To get API numbers
 from capstone_team_8_etf_behavior import API_Rules
 from datetime import datetime, timedelta
 
