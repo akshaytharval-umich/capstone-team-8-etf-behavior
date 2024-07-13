@@ -23,13 +23,15 @@ class DataManager():
         end_date_range = pd.date_range(start=end_date_initial, end=last_monday, freq='W-MON')
         # These two ranges create the index and first column
         self.data = pd.DataFrame(end_date_range,index=start_date_range)
+        # Rename from the default 0 to end date
+        self.data.columns=['end_date']
         # Next we need to populate with the ten columns
         for name in API_Rules.company_name_top_ten:
             self.data[name] = 0
     
     #@classmethod
     def load_data_table(self,filepath):
-        self.data = pd.read_csv(filepath)
+        self.data = pd.read_csv(filepath,index_col=0)
     
     def save_data_table(self,filepath):
         self.data.to_csv(filepath,index=True)

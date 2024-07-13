@@ -1,6 +1,6 @@
 import time
 from datetime import datetime, timedelta
-import API_Rules # To get API numbers
+from capstone_team_8_etf_behavior import API_Rules
 import os
 
 class NytQueryBuilder():
@@ -8,7 +8,7 @@ class NytQueryBuilder():
 
         nyt_url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?"
         # If no holding specified, then nothing to build
-        if holding not in API_Rules.symbols_top_ten:
+        if holding not in API_Rules.company_name_top_ten:
             return None
         else:
             nyt_url = nyt_url + f"q={holding}"
@@ -18,11 +18,11 @@ class NytQueryBuilder():
          
         # Next, add the date it should begin at
         if begin_date is not None:
-            nyt_url = nyt_url + f"&begin_date={begin_date.strftime("%Y%m%d")}"
+            nyt_url = nyt_url + f"""&begin_date={begin_date.strftime("%Y%m%d")}"""
         
         # Also add an end date if provided
         if end_date is not None:
-            nyt_url = nyt_url + f"&end_date={end_date.strftime("%Y%m%d")}"
+            nyt_url = nyt_url + f"""&end_date={end_date.strftime("%Y%m%d")}"""
         
         # Next, keep things as the business desk for now
         nyt_url = nyt_url + f'&fq=news_desk:("Business")'
@@ -30,7 +30,7 @@ class NytQueryBuilder():
         # if a page is given, 0 indexed
         nyt_url = nyt_url + f"&page={page}"
 
-        #sort
-        nyt_url = nyt_url + f"&sort='oldest'"
+        #sort - keeps failing on the API, level, temporarily removed
+        #nyt_url = nyt_url + f"&sort='oldest'"
 
         return nyt_url

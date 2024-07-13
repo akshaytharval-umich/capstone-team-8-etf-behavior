@@ -32,10 +32,6 @@ class NytManager():
         self.next_page = 0
         self.current_holding = ""
 
-        # Deepnote specific limitations
-        self.deepnote_start_time = datetime.now()
-        self.deepnote_active_limit = 23.5
-
         # Are Queries allowed flag
         self.permission = False
     
@@ -73,12 +69,6 @@ class NytManager():
     def submit_query(self,query):
         # First check that there is permission to make a request
         self.permission = self.check_permission()
-        # Check if 23.5 hours has passed, hence save and exit
-        elapsed_time = datetime.now() - self.deepnote_start_time
-        elapsed_hours = elapsed_time.total_seconds()/3600
-        if elapsed_hours >= self.deepnote_active_limit:
-            print("MAX 23.5 HOURS REACHED")
-            return ("LIMIT REACHED",429)
         if self.permission == True:
             # True, then make request
             # But wait for at least 12 seconds
