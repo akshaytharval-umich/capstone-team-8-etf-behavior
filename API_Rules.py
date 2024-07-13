@@ -4,5 +4,5 @@ nyt_per_min = 5
 nyt_wait_per_call_seconds = 12
 nyt_total_daily_calls = 500
 symbols_top_ten = ['MSFT','AAPL','NVDA','AMZN','META','GOOGL','GOOG','BRK-B','LLY','JPM']
-company_name_top_ten = ['Microsoft','Apple','NVIDIA','Amazon','Meta','Alphabet','Alphabet',
+company_name_top_ten = ['Microsoft','Apple','NVIDIA','Amazon','Meta','Alphabet (Class A)','Alphabet (Class C)',
                         'Berkshire Hathaway','Eli Lilly','JPMorgan Chase']

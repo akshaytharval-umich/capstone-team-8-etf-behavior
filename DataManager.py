@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 class DataManager():
     def __init__(self):
         self.data = pd.DataFrame()
-    
+        
     def create_data_table(self):
         # For a new creation of the data table
         # First step, create the start date for each range
@@ -27,8 +27,8 @@ class DataManager():
         for name in API_Rules.company_name_top_ten:
             self.data[name] = 0
     
-    @classmethod
-    def load_data_table(self, filepath):
+    #@classmethod
+    def load_data_table(self,filepath):
         self.data = pd.read_csv(filepath)
     
     def save_data_table(self,filepath):
