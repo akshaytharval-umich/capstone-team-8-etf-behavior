@@ -10,7 +10,7 @@ class DataManager():
     def create_data_table(self):
         # For a new creation of the data table
         # First step, create the start date for each range
-        start_date_initial = pd.Timestamp('2000-01-03')
+        start_date_initial = pd.Timestamp('2010-09-06')
         end_date_initial = start_date_initial + timedelta(days=7)
         # Then we need to find the last 2 mondays
         todays_date = datetime.now()
