@@ -11,7 +11,7 @@ class DataManager():
         # For a new creation of the data table
         # First step, create the start date for each range
         start_date_initial = pd.Timestamp('2010-09-06')
-        end_date_initial = start_date_initial + timedelta(days=7)
+        end_date_initial = start_date_initial + timedelta(days=6)
         # Then we need to find the last 2 mondays
         todays_date = datetime.now()
         zero_index_weekday = todays_date.weekday()%7
