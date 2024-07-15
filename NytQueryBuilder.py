@@ -28,6 +28,7 @@ class NytQueryBuilder():
         nyt_url = nyt_url + f'&fq=news_desk:("Business")'
 
         # if a page is given, 0 indexed
+        page = int(page)
         nyt_url = nyt_url + f"&page={page}"
 
         #sort - keeps failing on the API, level, temporarily removed

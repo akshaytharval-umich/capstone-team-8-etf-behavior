@@ -1,3 +1,4 @@
+
 import pandas as pd
 from capstone_team_8_etf_behavior import API_Rules
 from datetime import datetime, timedelta
@@ -20,7 +21,7 @@ class DataManager():
         earlier_monday = last_monday - timedelta(days=7)
         # Then create the ranges
         start_date_range = pd.date_range(start=start_date_initial, end=earlier_monday, freq='W-MON')
-        end_date_range = pd.date_range(start=end_date_initial, end=last_monday, freq='W-MON')
+        end_date_range = pd.date_range(start=end_date_initial, end=last_monday, freq='W-SUN')
         # These two ranges create the index and first column
         self.data = pd.DataFrame(end_date_range,index=start_date_range)
         # Rename from the default 0 to end date
@@ -28,6 +29,7 @@ class DataManager():
         # Next we need to populate with the ten columns
         for name in API_Rules.company_name_top_ten:
             self.data[name] = 0
+            self.data[name] = self.data[name].astype(int) # to ensure integer for pagination
     
     #@classmethod
     def load_data_table(self,filepath):

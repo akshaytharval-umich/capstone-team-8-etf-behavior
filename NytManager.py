@@ -57,12 +57,12 @@ class NytManager():
             self.bucket_count = 0
             self.bucket_start = datetime.now()
             return True
-        elif (self.query_count <= self.call_limit)\
-            and (self.bucket_count <= self.bucket_limit):
-                # Currently, underneath the limit
+        elif (self.query_count <= self.call_limit):
+            # Currently, underneath the limit
             return True
         else:
             # Currently, above the limit
+            print(f"Current query_count:{self.query_count} ")
             return False
     
     # A method that receives a query to request
