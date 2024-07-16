@@ -33,9 +33,9 @@ class DataManager():
     
     #@classmethod
     def load_data_table(self,filepath):
-        self.data = pd.read_csv(filepath,index_col=0)
+        self.data = pd.read_csv(filepath,encoding='utf-8',index_col=0)
     
     def save_data_table(self,filepath):
-        self.data.to_csv(filepath,index=True)
+        self.data.to_csv(filepath,encoding='utf-8',index=True)
     
     

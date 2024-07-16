@@ -90,8 +90,8 @@ def scrape(holding=None):
     if os.path.exists(articles_path):
         print("previous csv exists, combining")
         loaded_frame = pd.read_csv(articles_path)
-        df = pd.concat([loaded_frame,df],ignore_index=True)
-    df.to_csv(articles_path)
+        df = pd.concat([loaded_frame,df],encoding='utf-8',ignore_index=True)
+    df.to_csv(articles_path,encoding='utf-8')
     print("articles.csv exported")
 
     #export over the existing csv for the data_manager
