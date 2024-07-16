@@ -95,9 +95,11 @@ def scrape(holding=None):
     articles_path = "capstone_team_8_etf_behavior/articles.csv"
     if os.path.exists(articles_path):
         print("previous csv exists, combining")
-        loaded_frame = pd.read_csv(articles_path)
-        df = pd.concat([loaded_frame,df],encoding='utf-8',ignore_index=True)
-    df.to_csv(articles_path,encoding='utf-8')
+        loaded_frame = pd.read_csv(articles_path,encoding='utf-8',index_col=False)
+        # Remove any excess unnamed columns
+        loaded_frame = loaded_frame.loc[:, ~loaded_frame.columns.str.contains('^Unnamed')]
+        df = pd.concat([loaded_frame,df],ignore_index=True)
+    df.to_csv(articles_path,encoding='utf-8',index=False)
     print("articles.csv exported")
 
     #export over the existing csv for the data_manager
