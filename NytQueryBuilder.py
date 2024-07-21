@@ -1,6 +1,8 @@
 import time
 from datetime import datetime, timedelta
-from capstone_team_8_etf_behavior import API_Rules
+import API_Rules
+from dotenv import load_dotenv
+load_dotenv()
 import os
 
 class NytQueryBuilder():
@@ -14,7 +16,8 @@ class NytQueryBuilder():
             nyt_url = nyt_url + f"q={holding}"
         
         # Add the api key from the environment
-        nyt_url = nyt_url + f"&api-key={os.environ['NYTIMES_KEY']}"
+        #nyt_url = nyt_url + f"&api-key={os.environ['NYTIMES_KEY']}" # for deepnote
+        nyt_url = nyt_url + f"&api-key={os.environ['NYT_API_KEY']}" # for local env variable
          
         # Next, add the date it should begin at
         if begin_date is not None:

@@ -1,0 +1,6 @@
+/api_manager.pkl
+/articles.csv
+/data_manager.csv
+/.env
+/garbage_test.py
+__pycache__/

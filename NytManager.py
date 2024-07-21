@@ -2,7 +2,7 @@ import requests
 import json
 import pickle
 import time
-from capstone_team_8_etf_behavior import API_Rules
+import API_Rules
 from datetime import datetime, timedelta
 
 #---------------

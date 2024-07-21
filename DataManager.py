@@ -1,6 +1,6 @@
 
 import pandas as pd
-from capstone_team_8_etf_behavior import API_Rules
+import API_Rules
 from datetime import datetime, timedelta
 #---------
 

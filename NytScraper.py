@@ -1,13 +1,13 @@
 import os
 import pandas as pd
 from datetime import datetime
-from capstone_team_8_etf_behavior.NytManager import NytManager
-from capstone_team_8_etf_behavior.DataManager import DataManager
-from capstone_team_8_etf_behavior.NytQueryBuilder import NytQueryBuilder
+from NytManager import NytManager
+from DataManager import DataManager
+from NytQueryBuilder import NytQueryBuilder
 
 def scrape(holding=None):
     # First does a handler exist?
-    api_manager_path = "capstone_team_8_etf_behavior/api_manager.pkl"
+    api_manager_path = "api_manager.pkl"
     if os.path.exists(api_manager_path):
         # Use class method
         api_manager = NytManager.load_pickle(api_manager_path)
@@ -19,7 +19,7 @@ def scrape(holding=None):
         print("Created new API manager")
 
     # Next instance does the tracker exist?
-    data_manager_path = "capstone_team_8_etf_behavior/data_manager.csv"
+    data_manager_path = "data_manager.csv"
     if os.path.exists(data_manager_path):
         # Use class method
         data_manager = DataManager()
@@ -37,6 +37,10 @@ def scrape(holding=None):
     # This is where we need to loop as long
     query_response = True
     lst = []
+
+    # if the holding doesn't exist in the dataframe, create it
+    if 'Google' not in data_manager.data.columns:
+        data_manager.data[holding] = 0
 
     while query_response != False:
         
@@ -92,7 +96,7 @@ def scrape(holding=None):
     df['holding'] = holding
 
     # Does an existing articles.csv exist?
-    articles_path = "capstone_team_8_etf_behavior/articles.csv"
+    articles_path = "articles.csv"
     if os.path.exists(articles_path):
         print("previous csv exists, combining")
         loaded_frame = pd.read_csv(articles_path,encoding='utf-8',index_col=False)
