@@ -3,4 +3,5 @@
 /data_manager.csv
 /.env
 /garbage_test.py
+/full_articles.csv
 __pycache__/

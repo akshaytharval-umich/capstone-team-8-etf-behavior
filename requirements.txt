@@ -3,3 +3,5 @@ newspaper3k
 
 #source: https://github.com/theskumar/python-dotenv
 pip install python-dotenv
+
+pip install lxml_html_clean
