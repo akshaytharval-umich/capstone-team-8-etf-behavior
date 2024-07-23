@@ -5,3 +5,8 @@ newspaper3k
 pip install python-dotenv
 
 pip install lxml_html_clean
+
+# source for pytorch https://pytorch.org/get-started/locally/
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+# need for hugging face
+pip install transformers
