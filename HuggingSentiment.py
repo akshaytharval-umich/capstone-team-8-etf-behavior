@@ -6,8 +6,13 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification # Com
 import torch
 import torch.nn.functional as F
 
-# Next define the device as the gpu if available
-device ="cuda:0" if torch.cuda.is_available() else "cpu"
+def analyze_sentiment(text_lst,model_name):
+    # this function takes several parameters
+    # text_lst, this is a series of strings from the dataframe, typically either the lead paragraph or full text
+
+    # Next check if a gpu is available
+    device ="cuda:0" if torch.cuda.is_available() else "cpu"
+
 # And set the tokenizer
 #tokenizer = 
 model_name = "distilbert-base-uncased-finetuned-sst-2-english"
