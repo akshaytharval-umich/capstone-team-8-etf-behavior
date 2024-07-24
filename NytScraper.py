@@ -39,7 +39,7 @@ def scrape(holding=None):
     lst = []
 
     # if the holding doesn't exist in the dataframe, create it
-    if 'Google' not in data_manager.data.columns:
+    if holding not in data_manager.data.columns:
         data_manager.data[holding] = 0
 
     while query_response != False:

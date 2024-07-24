@@ -17,9 +17,10 @@ def extract_full_text(csv_path):
         df['full_text'] = ""
     
     # source: https://stackoverflow.com/questions/16476924/how-can-i-iterate-over-rows-in-a-pandas-dataframe
-    df_filt = df.head(50)
+    df_filt = df.iloc[50:100]
     for index,row in df_filt.iterrows():
         # hold off for the timer
+        print(index)
         time.sleep(test_time)
         url = row['web_url']
         article=Article(url)
@@ -31,6 +32,6 @@ def extract_full_text(csv_path):
             df.at[index,'full_text'] = full_text
     
     # then save the df to csv
-    df.to_csv("full_articles.csv",encoding='utf-8',index=False)
+    df.to_csv("articles.csv",encoding='utf-8',index=False)
                 
 extract_full_text("articles.csv")
