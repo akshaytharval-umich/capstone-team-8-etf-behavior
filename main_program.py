@@ -1,7 +1,7 @@
 from NytScraper import scrape
 from HuggingSentiment import analyze_sentiment
 import pandas as pd
-scrape(holding='Facebook')
+#scrape(holding='Facebook')
 
 #model_name = "distilbert-base-uncased-finetuned-sst-2-english"
 #model_name = "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis"

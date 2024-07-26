@@ -22,7 +22,7 @@ def analyze_sentiment(data,source_name,model_name):
     # and the classifier
     classifier = pipeline("sentiment-analysis", model=model, tokenizer=tokenizer,device=0)
     # Feed it the column of the source name
-    lst_dicts = classifier(data[source_name])
+    lst_dicts = classifier(data[source_name].tolist())
     # As a list of dictionaries, need to move the two scores, withh comprehension
     labels = [result_dict['label'] for result_dict in lst_dicts]
     scores = [result_dict['score'] for result_dict in lst_dicts]
