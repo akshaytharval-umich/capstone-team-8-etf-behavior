@@ -17,7 +17,7 @@ def extract_full_text(csv_path):
         df['full_text'] = ""
     
     # source: https://stackoverflow.com/questions/16476924/how-can-i-iterate-over-rows-in-a-pandas-dataframe
-    df_filt = df.iloc[50:100]
+    df_filt = df.iloc[150:200]
     for index,row in df_filt.iterrows():
         # hold off for the timer
         print(index)
