@@ -21,16 +21,25 @@ def analyze_sentiment(data,source_name,model_name):
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     # and the classifier
     classifier = pipeline("sentiment-analysis", model=model, tokenizer=tokenizer,device=0)
+    # First let's handle NaNs in the source data column, get indices of real values
+    df_index = data[data[source_name].notnull()].index
     # Feed it the column of the source name
-    lst_dicts = classifier(data[source_name].tolist())
+    lst = data.loc[data.index[df_index],source_name].tolist()
+
+    lst_dicts = classifier(lst)
+    print("made it")
     # As a list of dictionaries, need to move the two scores, withh comprehension
     labels = [result_dict['label'] for result_dict in lst_dicts]
     scores = [result_dict['score'] for result_dict in lst_dicts]
     # create the new name of the column from the model name
-    label_name = model_name + ":" + "label"
-    scores_name = model_name + ":" + "score"
-    data[label_name] = labels
-    data[scores_name] = scores
+    label_name = source_name + ":" + "label" + ":" + model_name
+    scores_name = source_name + ":" + "score" + ":" + model_name
+
+    data[label_name] = ""
+    data.loc[data.index[df_index],label_name] = labels
+
+    data[scores_name] = ""
+    data.loc[data.index[df_index],scores_name] = scores
 
     return data
 
