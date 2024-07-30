@@ -1,5 +1,8 @@
 /api_manager.pkl
 /articles.csv
+/articles_full.xlsx
+/articles_prefix.csv
+/articles_nvidia_and_meta.csv
 /data_manager.csv
 /.env
 /garbage_test.py

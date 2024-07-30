@@ -1,14 +1,17 @@
 from NytScraper import scrape
 from HuggingSentiment import analyze_sentiment
 import pandas as pd
-#scrape(holding='Facebook')
+scrape(holding='NVIDIA')
 
-model_name = "distilbert-base-uncased-finetuned-sst-2-english"
-model_name = "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis"
+""" model_dist_bert = "distilbert-base-uncased-finetuned-sst-2-english"
+model_dist_fin = "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis"
+
+model_names = [model_dist_bert,model_dist_fin]
 
 # Sentiment Analysis Stage
 # First load in articles.csv
 df = pd.read_csv("articles.csv",encoding='utf-8',index_col=False)
-new_df = analyze_sentiment(df,"abstract","distilbert-base-uncased-finetuned-sst-2-english")
+for model_name in model_names:
+    df = analyze_sentiment(df,"abstract",model_name)
 # then save the df to csv
-new_df.to_csv("articles.csv",encoding='utf-8',index=False)
+df.to_csv("articles.csv",encoding='utf-8',index=False) """
