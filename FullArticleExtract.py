@@ -22,14 +22,17 @@ def extract_full_text(csv_path):
         # hold off for the timer
         print(index)
         time.sleep(test_time)
-        url = row['web_url']
-        article=Article(url)
-        article.download()
-        article.parse()
-        full_text = article.text
-        if full_text is not None:
-            # pandas cheat sheet, address through .at and column
-            df.at[index,'full_text'] = full_text
+        try:
+            url = row['web_url']
+            article=Article(url)
+            article.download()
+            article.parse()
+            full_text = article.text
+            if full_text is not None:
+                # pandas cheat sheet, address through .at and column
+                df.at[index,'full_text'] = full_text
+        except:
+            df.at[index,'full_text'] = "EXCEPTION"
     
     # then save the df to csv
     df.to_csv("articles.csv",encoding='utf-8',index=False)
