@@ -1,7 +1,7 @@
 from NytScraper import scrape
 from HuggingSentiment import analyze_sentiment
 import pandas as pd
-scrape(holding='NVIDIA')
+scrape(holding='Meta')
 
 """ model_dist_bert = "distilbert-base-uncased-finetuned-sst-2-english"
 model_dist_fin = "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis"
