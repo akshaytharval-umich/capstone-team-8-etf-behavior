@@ -1,6 +1,8 @@
 # Reference for gpu usage: https://discuss.huggingface.co/t/is-transformers-using-gpu-by-default/8500
 # Reference for setup: https://www.youtube.com/watch?v=GSt00_-0ncQ
 # reference for arguments and examples: https://huggingface.co/docs/transformers/en/main_classes/pipelines
+# reference for truncation issue: https://stackoverflow.com/questions/67849833/how-to-truncate-input-in-the-huggingface-pipeline
+# and for truncation https://stackoverflow.com/questions/77948682/how-to-stop-at-512-tokens-when-sending-text-to-pipeline-huggingface-and-transfo
 # https://huggingface.co/docs/transformers/en/quicktour
 
 from transformers import pipeline
@@ -20,7 +22,7 @@ def analyze_sentiment(data,source_name,model_name):
     # and the tokenizer
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     # and the classifier
-    classifier = pipeline("sentiment-analysis", model=model, tokenizer=tokenizer,device=0)
+    classifier = pipeline("sentiment-analysis", model=model, tokenizer=tokenizer,max_length=512,truncation=True,device=0)
     # First let's handle NaNs in the source data column, get indices of real values
     df_index = data[data[source_name].notnull()].index
     # Feed it the column of the source name
