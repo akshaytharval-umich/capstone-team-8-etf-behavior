@@ -1,4 +1,5 @@
 import os
+import traceback
 import pandas as pd
 from datetime import datetime
 from NytManager import NytManager
@@ -62,31 +63,36 @@ def scrape(holding=None):
             print(query)
             
             # With the query, what do we get back?
-            result = api_manager.submit_query(query)
-            # If the query is a success
-            if result[0] == "SUCCESS" and result[1]['status'] == 'OK':
-                # Returned real result, the second argument of the result is a dictionary with the response key
-                response = result[1]['response']
-                # With a dictionary of docs and meta, are hits less than 10
-                difference = int(response['meta']['hits'] - response['meta']['offset'])
-                # difference holds the number of remaining results
-                if difference > 10:
-                    print("Requires Pagination")
-                    # Then more queries required, return offset increased by 10
-                    update = pagination + 1 # this advances the results by 10
+            try:
+                result = api_manager.submit_query(query)
+                # If the query is a success
+                if result[0] == "SUCCESS" and result[1]['status'] == 'OK':
+                    # Returned real result, the second argument of the result is a dictionary with the response key
+                    response = result[1]['response']
+                    # With a dictionary of docs and meta, are hits less than 10
+                    difference = int(response['meta']['hits'] - response['meta']['offset'])
+                    # difference holds the number of remaining results
+                    if difference > 10:
+                        print("Requires Pagination")
+                        # Then more queries required, return offset increased by 10
+                        update = pagination + 1 # this advances the results by 10
+                    else:
+                        # This is the remaining hits, return -1
+                        print("Complete Week")
+                        update = -1
+                    data_manager.data.at[row_label,holding] = update # updates the data_manager
+                    print("Update Value")
+                    print(data_manager.data.at[row_label,holding]) 
+                    lst.extend(response['docs'])
+                    query_response = True
+                    
                 else:
-                    # This is the remaining hits, return -1
-                    print("Complete Week")
-                    update = -1
-                data_manager.data.at[row_label,holding] = update # updates the data_manager
-                print("Update Value")
-                print(data_manager.data.at[row_label,holding]) 
-                lst.extend(response['docs'])
-                query_response = True
-                
-            else:
-                # then if it didn't succeed we need to stop and save
-                query_response = False
+                    # then if it didn't succeed we need to stop and save
+                    query_response = False
+            except Exception as e:
+                print(e)
+                print(traceback.format_exc())
+                continue
         else:
             # no rows to process
             query_response = False

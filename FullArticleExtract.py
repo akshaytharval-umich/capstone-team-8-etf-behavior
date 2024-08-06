@@ -17,21 +17,29 @@ def extract_full_text(csv_path):
         df['full_text'] = ""
     
     # source: https://stackoverflow.com/questions/16476924/how-can-i-iterate-over-rows-in-a-pandas-dataframe
-    df_filt = df.iloc[150:200]
+    df_filt = df[df['full_text'].isnull()]
+    print(len(df_filt.index))
+
     for index,row in df_filt.iterrows():
         # hold off for the timer
-        print(index)
-        time.sleep(test_time)
-        url = row['web_url']
-        article=Article(url)
-        article.download()
-        article.parse()
-        full_text = article.text
-        if full_text is not None:
-            # pandas cheat sheet, address through .at and column
-            df.at[index,'full_text'] = full_text
+        if row['full_text']!="":
+            if (index % 100) == 0:
+                print(index/31000)
+            #time.sleep(test_time)check iiiiiiioo
+            try:
+                url = row['web_url']
+                article=Article(url)
+                article.download()
+                article.parse()
+                full_text = article.text
+                if full_text is not None:
+                    # pandas cheat sheet, address through .at and column
+                    df.at[index,'full_text'] = full_text
+            except Exception as e:
+                print("Exception")
+                df.at[index,'full_text'] = "EXCEPTION"
     
     # then save the df to csv
-    df.to_csv("articles.csv",encoding='utf-8',index=False)
+    df.to_csv("articles_nv3met-full.csv",encoding='utf-8',index=False)
                 
 extract_full_text("articles.csv")
