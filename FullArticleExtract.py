@@ -37,7 +37,7 @@ def extract_full_text(csv_path):
                     df.at[index,'full_text'] = full_text
             except Exception as e:
                 print("Exception")
-                df.at[index,'full_text'] = "EXCEPTION"
+                df.at[index,'full_text'] = pd.NA
     
     # then save the df to csv
     df.to_csv("articles_nv3met-full.csv",encoding='utf-8',index=False)

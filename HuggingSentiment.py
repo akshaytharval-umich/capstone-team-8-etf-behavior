@@ -9,6 +9,7 @@ from transformers import pipeline
 from transformers import AutoTokenizer, AutoModelForSequenceClassification # Comes from model documentation
 import torch
 import torch.nn.functional as F
+import pandas as pd
 
 def analyze_sentiment(data,source_name,model_name):
     # this function takes several parameters
@@ -23,6 +24,8 @@ def analyze_sentiment(data,source_name,model_name):
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     # and the classifier
     classifier = pipeline("sentiment-analysis", model=model, tokenizer=tokenizer,max_length=512,truncation=True,device=0)
+    # This line only needs to occur one time, replace "EXCEPTION" to pandas.NA, to fix a previous oversight
+    data[source_name] = data[source_name].replace('EXCEPTION',pd.NA)
     # First let's handle NaNs in the source data column, get indices of real values
     df_index = data[data[source_name].notnull()].index
     # Feed it the column of the source name
