@@ -1,10 +1,15 @@
 /api_manager.pkl
 /articles.csv
 /articles_full.xlsx
+/articles_full.csv
+/articles_merged.csv
 /articles_prefix.csv
 /articles_prefix_full.csv
 /articles_nvidia_and_meta.csv
 /articles_nv3met-full.csv
+/articles_sentiment_analysis.csv
+/articles_sentiment_analysis.zip
+/VOO_historical_data.csv
 /data_manager.csv
 /.env
 /garbage_test.py
