@@ -1,6 +1,6 @@
-from NytScraper import scrape
-from HuggingSentiment import analyze_sentiment
-from DataPrepUtils import calc_one_hot_encode, determine_col_lst
+#from NytScraper import scrape
+#from HuggingSentiment import analyze_sentiment
+import DataPrepUtils as utils
 import pandas as pd
 #scrape(holding='Meta')
 
@@ -18,9 +18,13 @@ model_names = [model_dist_bert,model_dist_fin,model_finbert]
 #then save the df to csv
 #df.to_csv("articles_sentiment_analysis.csv",encoding='utf-8',index=False)
 
-df = pd.read_csv("articles_sentiment_analysis.csv",encoding='utf-8',index_col=False)
-column_lst = determine_col_lst(df)
+#df = pd.read_csv("articles_sentiment_analysis.csv",encoding='utf-8',index_col=False)
+#column_lst = utils.determine_col_lst(df)
 
-encoded_df = calc_one_hot_encode(df,column_lst)
-print(encoded_df.columns)
-encoded_df.to_csv("articles_encoded.csv",encoding='utf-8',index=False)
+#encoded_df = utils.calc_one_hot_encode(df,column_lst)
+#print(encoded_df.columns)
+#encoded_df.to_csv("articles_encoded.csv",encoding='utf-8',index=False)
+
+# Next pre-processing before grouping
+df = pd.read_csv("articles_encoded.csv",encoding='utf-8',index_col=False)
+new_df = utils.scale_vectors(df)
