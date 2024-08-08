@@ -4,7 +4,7 @@ from utils import *
 from plotting import *
 from model import *
 
-file_path = 'data\VOO_historical_data.csv' 
+file_path = 'data\voo_historical_data.csv' 
 df = load_data(file_path)
     
     # Preprocess the data
@@ -30,8 +30,9 @@ initial_value = ser.iloc[train_size]  # use the actual closing price before the 
 actual_predictions = log_ret_to_actual(predictions, initial_value)
     
     # Convert the actual test log returns to actual values
+initial_train_value = ser.iloc[0]
 test_actual_values = log_ret_to_actual(test, initial_value)
-train_actual_values = log_ret_to_actual(train, 78.213036)
+train_actual_values = log_ret_to_actual(train, initial_train_value)
     
     # Evaluate the model
 mse, rmse = evaluate_arima_model(test, predictions)

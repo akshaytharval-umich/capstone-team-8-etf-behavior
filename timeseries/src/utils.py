@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from sklearn.metrics import mean_squared_error, mean_absolute_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from statsmodels.tsa.stattools import adfuller
 import statsmodels.api as sm
 import matplotlib.dates as mdates
@@ -9,11 +9,20 @@ import numpy as np
 
 def evaluate_model(y_actual, y_predicted):
     """Evaluate the model performance."""
+    # Calculate metrics
     mse = mean_squared_error(y_actual, y_predicted)
+    rmse = np.sqrt(mse)
     mae = mean_absolute_error(y_actual, y_predicted)
-    print(f'Mean Squared Error: {mse}')
-    print(f'Mean Absolute Error: {mae}')
-    return mse, mae
+    r2 = r2_score(y_actual, y_predicted)
+    
+    # Print metrics
+    print(f'Mean Squared Error (MSE): {mse}')
+    print(f'Root Mean Squared Error (RMSE): {rmse}')
+    print(f'Mean Absolute Error (MAE): {mae}')
+    print(f'R-squared (R²): {r2}')
+    
+    return mse, rmse, mae, r2
+
 
 def calc_rolling_stats(ser, wd_size=7):
     arr_w = np.ones(wd_size)
