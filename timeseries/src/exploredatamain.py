@@ -5,11 +5,11 @@ from plotting import *
 
 def main():
     # Load the data
-    file_path = 'data\VOO_historical_data.csv' 
+    file_path = 'data/voo_historical_data.csv' 
     df = load_data(file_path)
     
     # Preprocess the data
-    close_series = series_data(df)
+    close_series = series_data(df,start_year=None,end_year=None)
     
     # Plot historical closing prices
     plot_closing_prices(close_series)

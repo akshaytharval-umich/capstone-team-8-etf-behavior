@@ -3,6 +3,7 @@ from keras.models import Sequential
 from keras.layers import LSTM, Dense, Dropout
 from statsmodels.tsa.arima.model import ARIMA
 from sklearn.metrics import mean_squared_error
+from keras.callbacks import EarlyStopping
 import numpy as np
 
 def build_model(input_shape):
@@ -16,10 +17,20 @@ def build_model(input_shape):
     model.compile(optimizer='adam', loss='mean_squared_error')
     return model
 
-def train_model(model, X_train, y_train, epochs, batch_size):
-    """Train the LSTM model."""
-    model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, validation_split=0.1)
+def train_model(model, X_train, y_train,X_val, y_val, epochs, batch_size):
+    """Train the LSTM model with early stopping."""
+    early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+    
+    model.fit(
+        X_train, 
+        y_train, 
+        epochs=epochs, 
+        batch_size=batch_size, 
+        validation_data=(X_val, y_val), 
+        callbacks=[early_stopping]
+    )
     return model
+
 
 def fit_arima_model(series, order=(5, 0, 5)):
     model = ARIMA(series, order=order)
