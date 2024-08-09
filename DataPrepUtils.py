@@ -28,8 +28,6 @@ def scale_vectors(data):
     label_regex = r":label:"
     scores_col_names = [column for column in data.columns if re.search(score_regex,column)]
     labels_col_names = [column for column in data.columns if re.search(label_regex,column)]
-    print(scores_col_names)
-    print(labels_col_names)
 
     # Then we need to loop through each scaling factor aka the scores
     for score_col_name in scores_col_names:
@@ -47,7 +45,24 @@ def scale_vectors(data):
         print(score_col_name)
         print(matching_label_column_names)
         # then we need to vector multiply
-        for label_col_name in labels_col_names:
+        for label_col_name in matching_label_column_names:
             data[label_col_name] = data[score_col_name] * data[label_col_name]
         data = data.drop(score_col_name,axis=1)
     return data
+
+# First is to filter down to the important fields pub_date, :label:, holding_
+def group_apply_reduce(data):
+    # The goal of this function is to group the dataframe by date and sum the vectors of label and holding
+    col_lst = ['pub_date']
+    label_lst = [x for x in data.columns if ':label:' in x]
+    col_lst.extend(label_lst)
+    hold_lst = [x for x in data.columns if 'holding_' in x]
+    col_lst.extend(hold_lst)
+    # now select the relevant columns
+    df = data[col_lst]
+    # Then convert 'pub_date' to datetime object. source: 
+    # https://www.tutorialspoint.com/how-to-group-pandas-dataframe-by-date-and-time#:~:text=We%20use%20the%20groupby(),procedure%20on%20the%20assembled%20information.
+    df['pub_date'] = pd.to_datetime(df['pub_date'])
+    # then perform groupby
+    df = df.groupby(pd.Grouper(key="pub_date",freq="D")).sum()
+    return df

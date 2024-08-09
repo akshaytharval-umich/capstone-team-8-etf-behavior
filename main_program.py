@@ -26,5 +26,10 @@ model_names = [model_dist_bert,model_dist_fin,model_finbert]
 #encoded_df.to_csv("articles_encoded.csv",encoding='utf-8',index=False)
 
 # Next pre-processing before grouping
-df = pd.read_csv("articles_encoded.csv",encoding='utf-8',index_col=False)
-new_df = utils.scale_vectors(df)
+#df = pd.read_csv("articles_encoded.csv",encoding='utf-8',index_col=False)
+#new_df = utils.scale_vectors(df)
+#new_df.to_csv("test.csv",encoding='utf-8',index=False)
+
+df = pd.read_csv("test.csv",encoding='utf-8',index_col=False)
+df = utils.group_apply_reduce(df)
+df.to_csv("new_test.csv",encoding='utf-8',index=True)

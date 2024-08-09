@@ -10,6 +10,8 @@
 /articles_nv3met-full.csv
 /articles_sentiment_analysis.csv
 /articles_sentiment_analysis.zip
+/reduced_data.csv
+/test.csv
 /VOO_historical_data.csv
 /data_manager.csv
 /.env
