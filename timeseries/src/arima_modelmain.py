@@ -4,11 +4,11 @@ from utils import *
 from plotting import *
 from model import *
 
-file_path = 'data\voo_historical_data.csv' 
+file_path = 'data/voo_historical_data.csv' 
 df = load_data(file_path)
     
     # Preprocess the data
-ser = series_data(df)
+ser = series_data(df,start_year=None, end_year=None)
     
 
 log_ret = calc_log_ret(ser)
@@ -35,9 +35,10 @@ test_actual_values = log_ret_to_actual(test, initial_value)
 train_actual_values = log_ret_to_actual(train, initial_train_value)
     
     # Evaluate the model
-mse, rmse = evaluate_arima_model(test, predictions)
-print(f'MSE: {mse}, RMSE: {rmse}')
+evaluate_model(test_actual_values, actual_predictions)
+#mse, rmse, mae, r2= evaluate_model(test, predictions)
+#print(f'MSE: {mse}, RMSE: {rmse}')
     
     # Plot actual vs predicted values
-plot_actual_vs_predicted(test, predictions, "Actual vs Predicted Prices")
+#plot_actual_vs_predicted(test, predictions, "Actual vs Predicted Prices")
 plot_actual_vs_predicted_vs_original(train_actual_values,test_actual_values, actual_predictions, "Actual vs Predicted Prices")

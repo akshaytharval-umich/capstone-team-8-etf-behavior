@@ -100,11 +100,39 @@ def plot_actual_vs_predicted(actual, predicted, title):
     plt.show()
 
 
-def plot_actual_vs_predicted_vs_original(train,actual, predicted, title):
+def plot_actual_vs_predicted_vs_original(train, actual, predicted, title):
+    """
+    Plots the original training data, actual values, and predicted values.
+
+    Parameters:
+    - train: pd.Series, original training data
+    - actual: pd.Series, actual values for the test set
+    - predicted: pd.Series, predicted values for the test set
+    - title: str, title of the plot
+    """
+    
+    # Create the plot
     fig, ax = plt.subplots(figsize=(14, 7))
+    
+    # Plot the original training data
     ax.plot(train, label="Original")
-    ax.plot(train[-1:].append(actual), label='Actual')
-    ax.plot(train[-1:].append(predicted), label='Predicted', linestyle='--')
+    
+    # Concatenate the last value of the training set with the actual values
+    actual_concat = pd.concat([train[-1:], actual])
+    
+    # Concatenate the last value of the training set with the predicted values
+    predicted_concat = pd.concat([train[-1:], predicted])
+    
+    # Plot the actual and predicted values
+    ax.plot(actual_concat, label='Actual')
+    ax.plot(predicted_concat, label='Predicted', linestyle='--')
+    
+    # Set the labels and title
     ax.set_xlabel("Date")
-    ax.set_title("Daily Voo Prices")
-    ax.legend()  
+    ax.set_title(title)
+    ax.legend()
+    
+    # Display the plot
+    plt.show()
+
+ 
