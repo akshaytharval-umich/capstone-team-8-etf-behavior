@@ -18,14 +18,13 @@ def extract_full_text(csv_path):
     
     # source: https://stackoverflow.com/questions/16476924/how-can-i-iterate-over-rows-in-a-pandas-dataframe
     df_filt = df[df['full_text'].isnull()]
-    print(len(df_filt.index))
+    num_total_rows = len(df_filt.index)
 
     for index,row in df_filt.iterrows():
         # hold off for the timer
         if row['full_text']!="":
             if (index % 100) == 0:
-                print(index/31000)
-            #time.sleep(test_time)check iiiiiiioo
+                print(index/num_total_rows)
             try:
                 url = row['web_url']
                 article=Article(url)

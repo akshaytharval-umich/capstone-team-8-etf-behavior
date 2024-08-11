@@ -31,9 +31,13 @@ model_names = [model_dist_bert,model_dist_fin,model_finbert]
 #new_df = utils.scale_vectors(df)
 #new_df.to_csv("articles_scaled.csv",encoding='utf-8',index=False)
 
-#df = pd.read_csv("articles_scaled.csv",encoding='utf-8',index_col=False)
-#df = utils.group_apply_reduce(df)
-#df.to_csv("articles_grouped.csv",encoding='utf-8',index=True)
+# Next timeshift the weekends
+df = utils.time_shift("articles_scaled.csv")
+df.to_csv("articles_shifted.csv",encoding='utf-8',index=True)
+
+df = pd.read_csv("articles_shifted.csv",encoding='utf-8',index_col=False)
+df = utils.group_apply_reduce(df)
+df.to_csv("articles_grouped.csv",encoding='utf-8',index=True)
 
 df = pd.read_csv("articles_grouped.csv",encoding='utf-8',index_col='pub_date')
 voo = pd.read_csv("VOO_historical_data.csv",encoding='utf-8',index_col='Date')

@@ -3,6 +3,8 @@
 
 import pandas as pd
 import re
+from datetime import datetime, timedelta
+
 def determine_col_lst(data):
     # get every column containing :label: and  holding
     column_names = [x for x in data.columns if ':label:' in x]
@@ -74,7 +76,6 @@ def group_apply_reduce(data):
     return df
 
 def join_voo_data(data,voo_data):
-    # reference for code base: 
     # Scaffolding with chatgpt
     # This is a function that joins the embedded and analyzed articles, with the historical data from VOO
     # looking at the v00 data, and the processed data, we only care if it happened on the same day
@@ -85,6 +86,22 @@ def join_voo_data(data,voo_data):
     voo_data.index = pd.to_datetime(voo_data.index,utc=True)
     voo_data.index = voo_data.index.normalize()
     combined_df = data.join(voo_data, how="outer")
+    # Eliminate days where the market is closed
+    combined_df = combined_df[~combined_df['Open'].isnull()]
     # Calculate etf_price__change
-    
+    combined_df['etf_price_change'] = combined_df['Close'] - combined_df['Open']
     return combined_df
+
+def time_shift(data_path):
+    # the purpose of this function is to shift weekends to Monday, to capture weekend sentiment
+    df = pd.read_csv(data_path,encoding='utf-8',index_col=False)
+    # cast to date time
+    df['pub_date'] = pd.to_datetime(df['pub_date'])
+    for index, row in df.iterrows():
+        if row['pub_date'].weekday()==5:
+            # its 0 indexed, so 5 is saturday, 6 is sunday
+            df.at[index,'pub_date'] = row['pub_date'] + timedelta(days=2)
+        elif row['pub_date'].weekday()==6:
+            # only add 1 day since its Sunday
+            df.at[index,'pub_date'] = row['pub_date'] + timedelta(days=1)
+    return df
