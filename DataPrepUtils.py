@@ -60,9 +60,31 @@ def group_apply_reduce(data):
     col_lst.extend(hold_lst)
     # now select the relevant columns
     df = data[col_lst]
+    # made a dictionary for an aggregation, want the average sentiment score, and how many queries it got hits for
+    agg_dict = {}
+    for label in label_lst:
+        agg_dict[label] = "mean"
+    for holding in hold_lst:
+        agg_dict[holding] = "sum"
     # Then convert 'pub_date' to datetime object. source: 
     # https://www.tutorialspoint.com/how-to-group-pandas-dataframe-by-date-and-time#:~:text=We%20use%20the%20groupby(),procedure%20on%20the%20assembled%20information.
     df['pub_date'] = pd.to_datetime(df['pub_date'])
     # then perform groupby
-    df = df.groupby(pd.Grouper(key="pub_date",freq="D")).sum()
+    df = df.groupby(pd.Grouper(key="pub_date",freq="D")).agg(agg_dict)
     return df
+
+def join_voo_data(data,voo_data):
+    # reference for code base: 
+    # Scaffolding with chatgpt
+    # This is a function that joins the embedded and analyzed articles, with the historical data from VOO
+    # looking at the v00 data, and the processed data, we only care if it happened on the same day
+    # issues with different time zones, set everything to utc
+    # we also wanna keep all dates for now, so leave everything opn join
+    data.index = pd.to_datetime(data.index,utc=True)
+    data.index = data.index.normalize()
+    voo_data.index = pd.to_datetime(voo_data.index,utc=True)
+    voo_data.index = voo_data.index.normalize()
+    combined_df = data.join(voo_data, how="outer")
+    # Calculate etf_price__change
+    
+    return combined_df

@@ -1,10 +1,8 @@
 /api_manager.pkl
 /complete_raw_articles.csv
-/reduced_data.csv
-/test.csv
+articles*
 /VOO_historical_data.csv
 /data_manager.csv
 /.env
 /garbage_test.py
-/full_articles.csv
 __pycache__/
