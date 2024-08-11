@@ -40,6 +40,6 @@ def extract_full_text(csv_path):
                 df.at[index,'full_text'] = pd.NA
     
     # then save the df to csv
-    df.to_csv("articles_nv3met-full.csv",encoding='utf-8',index=False)
+    df.to_csv(csv_path,encoding='utf-8',index=False)
                 
-extract_full_text("articles.csv")
+extract_full_text("complete_raw_articles.csv")

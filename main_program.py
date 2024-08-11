@@ -2,13 +2,12 @@
 #from HuggingSentiment import analyze_sentiment
 import DataPrepUtils as utils
 import pandas as pd
-#scrape(holding='Meta')
 
-model_dist_bert = "distilbert-base-uncased-finetuned-sst-2-english"
-model_dist_fin = "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis"
-model_finbert = "ProsusAI/finbert"
+#model_dist_bert = "distilbert-base-uncased-finetuned-sst-2-english"
+#model_dist_fin = "mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis"
+#model_finbert = "ProsusAI/finbert"
 
-model_names = [model_dist_bert,model_dist_fin,model_finbert]
+#model_names = [model_dist_bert,model_dist_fin,model_finbert]
 
 # Sentiment Analysis Stage
 # First load in articles.csv "full_text"
