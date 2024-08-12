@@ -1,32 +1,56 @@
  
 # capstone-team-8-etf-behavior
 UMich MADS SIADS 699 Capstone Team 8
+
+## Introduction:
+This project aims to predict the behavior of the VOO ETF by leveraging a dual approach: analyzing comprehensive historical time series data and performing sentiment analysis on news articles related to its top 10 holdings.
  
- # Time Series Analysis and Model
- The main script loads historical data, preprocesses it, splits it into training and testing sets, creates sequences for the LSTM model, builds and trains the model, makes predictions, and evaluates the model's performance.
+## Time Series Analysis and Model
+The main script loads historical data, preprocesses it, splits it into training and testing sets, creates sequences for the LSTM model, builds and trains the model, makes predictions, and evaluates the model's performance.
 
 
-## Usage
-## 1. Prepare your data:
+### Usage
+#### 1. Prepare your data:
 
     Place your historical data CSV file in the data directory. Ensure the file is named voo_historical_data.csv or update the file_path variable in the main functions.
 
-## 2. Run the main script:
+#### 2. Run the main script:
 
-####  LSTM Model
+#####  LSTM Model
 ` python main.py  `
         This will execute the LSTM model pipeline, from data loading and preprocessing to model training and evaluation.
-####  ARIMA Model
+#####  ARIMA Model
 `python arima_modelmain.py `
         This will execute the ARIMA model pipeline, from data loading and preprocessing to model training and evaluation
-####  Exploratory Data Analysis (EDA)
+#####  Exploratory Data Analysis (EDA)
 `python exploredatamain.py`
         This will execute the EDA pipeline of the Time series Analysis.
 
 
 
-# Financial News Summarization and Sentiment Analysis
+## Financial News Summarization and Sentiment Analysis
 This project processes a dataset of financial news articles to generate summaries, assess sentiment towards specific companies, and evaluate the relevance of each article using the OpenAI API. The enriched dataset can be used for building a sentiment analysis model.
+
+## Extracting news articles from New York Times API:
+
+### Setup:
+1. Clone this repository
+2. Run the following for the holding name of a company (holding name needs to be one of the companies in `API_Rules.py`)
+```
+from NytScraper import scrape
+scrape('Meta')
+```
+3. Run the above piece of code till the scrapping stops
+4. There can be cases when scrapping stops due to throttling from NYT API, in that case, start again the next day
+
+#### Input:
+Holding name from `API_Rules.py` (you can also add more companies if needed)
+
+#### Output:
+Two CSV files:
+1. CSV file with articles
+2. Helper CSV file representing news articles from which holding is extracted
+
 
 # PART I
 
