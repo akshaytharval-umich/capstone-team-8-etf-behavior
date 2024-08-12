@@ -3,6 +3,8 @@
 
 import pandas as pd
 import re
+from datetime import datetime, timedelta
+
 def determine_col_lst(data):
     # get every column containing :label: and  holding
     column_names = [x for x in data.columns if ':label:' in x]
@@ -60,9 +62,100 @@ def group_apply_reduce(data):
     col_lst.extend(hold_lst)
     # now select the relevant columns
     df = data[col_lst]
+    # made a dictionary for an aggregation, want the average sentiment score, and how many queries it got hits for
+    agg_dict = {}
+    for label in label_lst:
+        agg_dict[label] = "mean"
+    for holding in hold_lst:
+        agg_dict[holding] = "sum"
     # Then convert 'pub_date' to datetime object. source: 
     # https://www.tutorialspoint.com/how-to-group-pandas-dataframe-by-date-and-time#:~:text=We%20use%20the%20groupby(),procedure%20on%20the%20assembled%20information.
     df['pub_date'] = pd.to_datetime(df['pub_date'])
     # then perform groupby
-    df = df.groupby(pd.Grouper(key="pub_date",freq="D")).sum()
+    df = df.groupby(pd.Grouper(key="pub_date",freq="D")).agg(agg_dict)
     return df
+
+def join_voo_data(data,voo_data):
+    # Scaffolding with chatgpt
+    # This is a function that joins the embedded and analyzed articles, with the historical data from VOO
+    # looking at the v00 data, and the processed data, we only care if it happened on the same day
+    # issues with different time zones, set everything to utc
+    # we also wanna keep all dates for now, so leave everything on join
+    data.index = pd.to_datetime(data.index,utc=True)
+    data.index = data.index.normalize()
+    voo_data.index = pd.to_datetime(voo_data.index,utc=True)
+    voo_data.index = voo_data.index.normalize()
+    combined_df = data.join(voo_data, how="outer")
+    # Eliminate days where the market is closed
+    combined_df = combined_df[~combined_df['Open'].isnull()]
+    # Forward fill days where holiday for news, but not the market
+    combined_df = combined_df.ffill()
+    return combined_df
+
+def calc_etf_price_change(data,threshold):
+    # Calculate etf_price__change
+    data['etf_price_change'] = (data['Close'] - data['Open'])/data['Open']*100
+    # with a set threshold, rate as neutral, positive, negative, with dataframe apply
+    def percent_classification(percentage,threshold):
+        if percentage  >= threshold:
+            return 1 # since positive
+        elif percentage <= -threshold:
+            # negative threshold, consider threshold a band on both sides to capture noise
+            return -1
+        else:
+            return 0 # it's noise
+    column_name = f"ground_truth_{threshold}%"
+    data[column_name] = data['etf_price_change'].apply(percent_classification,threshold=threshold)
+    return data
+
+def time_shift(data_path):
+    # the purpose of this function is to shift weekends to Monday, to capture weekend sentiment
+    df = pd.read_csv(data_path,encoding='utf-8',index_col=False)
+    # cast to date time
+    df['pub_date'] = pd.to_datetime(df['pub_date'])
+    for index, row in df.iterrows():
+        if row['pub_date'].weekday()==5:
+            # its 0 indexed, so 5 is saturday, 6 is sunday
+            df.at[index,'pub_date'] = row['pub_date'] + timedelta(days=2)
+        elif row['pub_date'].weekday()==6:
+            # only add 1 day since its Sunday
+            df.at[index,'pub_date'] = row['pub_date'] + timedelta(days=1)
+    return df
+
+def compare_ground_truth(data_path, model_names,column_names):
+    # this takes the output of join_voo_data and determines whether sentiment correlates strongly with movement
+    def parse_label(string_label):
+        # internal function to parse state from end of label
+        lst = string_label.split('_')
+        state = lst[-1].lower() # should be the last part of a 3 element list
+        if state == "positive":
+            return 1
+        elif state == "neutral":
+            return 0
+        else:
+            return -1
+    df = pd.read_csv(data_path,encoding='utf-8',index_col=0)
+    # model_names is a list of the hugging face models
+    for source_column in column_names:
+        for model_name in model_names:
+            label_regex=rf"^{source_column}:label:{model_name}_"
+            columns = df.filter(regex=label_regex).columns
+            # can use idxmax according to https://pandas.pydata.org/pandas-docs/version/0.17.0/generated/pandas.DataFrame.idxmax.html
+            highest_score_label = df[columns].idxmax(axis=1)
+            # highest_scoree_label contains the column name of the highest value, parse the state at the end after _ with a  split
+            col_name = f"{source_column}:{model_name}_Prediction"
+            df[col_name] = highest_score_label.apply(parse_label)
+    return df
+
+def split_frame(data_path,percent_test=None,span_test = None):
+    # given data and a percentage or a time delta object, return two dataframes
+    df = pd.read_csv(data_path,encoding='utf-8',index_col=0)
+    start_date = df.index[0]
+    last_date = df.index[-1]
+    print(len(df.index))
+    if percent_test != None:
+        # then take a percentage for the test
+        slice = int(len(df.index)*percent_test)
+        test_index = df.index[-slice]
+    print(start_date)
+    print(last_date)

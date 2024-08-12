@@ -32,7 +32,7 @@ def analyze_sentiment(data,source_name,model_name):
     lst = data.loc[data.index[df_index],source_name].tolist()
 
     lst_dicts = classifier(lst)
-    print("made it")
+
     # As a list of dictionaries, need to move the two scores, withh comprehension
     labels = [result_dict['label'] for result_dict in lst_dicts]
     scores = [result_dict['score'] for result_dict in lst_dicts]
@@ -45,6 +45,6 @@ def analyze_sentiment(data,source_name,model_name):
 
     data[scores_name] = ""
     data.loc[data.index[df_index],scores_name] = scores
-
+    print(f"{source_name} and {model_name}")
     return data
 
