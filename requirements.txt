@@ -1,12 +1,71 @@
-yfinance==0.1.70
+# Financial data extraction
+yfinance==0.2.40
+
+# Web scraping and data parsing
 newspaper3k
+beautifulsoup4==4.12.3
+lxml_html_clean
 
-#source: https://github.com/theskumar/python-dotenv
-pip install python-dotenv
+# Environment variable management
+python-dotenv
 
-pip install lxml_html_clean
+# PyTorch and related libraries for machine learning
+torch==1.13.1+cu116
+torchvision==0.14.1+cu116
+torchaudio==0.12.0+cu113
+torchmetrics==0.7.3
+torchtext==0.13.0
 
-# source for pytorch https://pytorch.org/get-started/locally/
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
-# need for hugging face
-pip install transformers
+# TensorFlow for machine learning
+tensorflow==2.13.1
+keras==2.13.1
+
+# Hugging Face transformers for NLP tasks
+transformers==4.20.1
+huggingface-hub==0.10.1
+
+# Data analysis and manipulation
+pandas==2.2.2
+numpy==1.24.3
+scikit-learn==1.5.1
+scipy==1.14.0
+statsmodels==0.14.2
+
+# Visualization
+matplotlib==3.9.1
+seaborn==0.13.2
+plotly==5.10.0
+
+# Text processing and NLP
+spacy==3.4.1
+nltk==3.7
+
+# Web and API requests
+requests==2.32.3
+requests-oauthlib==2.0.0
+
+# Jupyter Notebook and related tools for interactive development
+notebook==6.5.1
+jupyter-core==4.11.1
+jupyter-server==1.21.0
+jupyter_client==7.4.2
+jupyterlab==3.4.8
+jupyterlab-pygments==0.2.2
+jupyterlab-widgets==3.0.7
+jupyterlab_server==2.16.0
+
+# Additional utilities and libraries
+tqdm==4.64.1
+tornado==6.2
+tokenizers==0.12.1
+regex==2022.9.13
+pydantic==1.9.2
+protobuf==3.18.1
+opencv-python==4.6.0.66
+flake8==5.0.4
+google-auth==2.13.0
+google-auth-oauthlib==0.4.6
+google-pasta==0.2.0
+grpcio==1.43.0
+h5py==3.7.0
+graphviz==0.20.1
