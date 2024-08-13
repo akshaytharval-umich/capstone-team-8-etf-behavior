@@ -4,6 +4,7 @@
 import pandas as pd
 import re
 from datetime import datetime, timedelta
+from sklearn.metrics import confusion_matrix
 
 def determine_col_lst(data):
     # get every column containing :label: and  holding
@@ -106,7 +107,7 @@ def calc_etf_price_change(data,threshold):
             return 0 # it's noise
     column_name = f"ground_truth_{threshold}%"
     data[column_name] = data['etf_price_change'].apply(percent_classification,threshold=threshold)
-    return data
+    return data,column_name
 
 def time_shift(data_path):
     # the purpose of this function is to shift weekends to Monday, to capture weekend sentiment
@@ -122,7 +123,7 @@ def time_shift(data_path):
             df.at[index,'pub_date'] = row['pub_date'] + timedelta(days=1)
     return df
 
-def compare_ground_truth(data_path, model_names,column_names):
+def compare_ground_truth(data_path, model_names,column_names,ground_labels):
     # this takes the output of join_voo_data and determines whether sentiment correlates strongly with movement
     def parse_label(string_label):
         # internal function to parse state from end of label
@@ -136,6 +137,7 @@ def compare_ground_truth(data_path, model_names,column_names):
             return -1
     df = pd.read_csv(data_path,encoding='utf-8',index_col=0)
     # model_names is a list of the hugging face models
+    model_lst = []
     for source_column in column_names:
         for model_name in model_names:
             label_regex=rf"^{source_column}:label:{model_name}_"
@@ -144,8 +146,15 @@ def compare_ground_truth(data_path, model_names,column_names):
             highest_score_label = df[columns].idxmax(axis=1)
             # highest_scoree_label contains the column name of the highest value, parse the state at the end after _ with a  split
             col_name = f"{source_column}:{model_name}_Prediction"
+            model_lst.append(col_name)
             df[col_name] = highest_score_label.apply(parse_label)
-    return df
+    # with the df
+    for model_label in model_lst:
+        for ground_label in ground_labels:
+            # compare both data series with sklearn, easier then by hand
+            matrix = confusion_matrix(df[ground_label],df[model_label],labels=[1,0,-1])
+            print(matrix)
+
 
 def split_frame(data_path,percent_test=None,span_test = None):
     # given data and a percentage or a time delta object, return two dataframes

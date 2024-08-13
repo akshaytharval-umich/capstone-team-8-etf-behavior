@@ -44,12 +44,14 @@ voo = pd.read_csv("VOO_historical_data.csv",encoding='utf-8',index_col='Date')
 combined_df = utils.join_voo_data(df,voo) 
 # Then calculate the price change w/ threshold in %
 thresholds = [0.1,0.2,0.3,0.4]
+ground_truth_labels = []
 for percentage in thresholds:
-    combined_df = utils.calc_etf_price_change(combined_df,threshold=percentage)
+    combined_df,col = utils.calc_etf_price_change(combined_df,threshold=percentage)
+    ground_truth_labels.append(col)
 combined_df.to_csv("articles_voo.csv",encoding='utf-8',index=True)
 
 # Evaluation of ground truth versus movement, compare ground truth
-df= utils.compare_ground_truth("articles_voo.csv",model_names,column_names)
+df= utils.compare_ground_truth("articles_voo.csv",model_names,column_names,ground_truth_labels)
 df.to_csv("articles_ground_comparison.csv",encoding='utf-8',index=True)
 
 # Evaluation
