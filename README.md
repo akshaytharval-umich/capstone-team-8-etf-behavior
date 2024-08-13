@@ -3,7 +3,7 @@
 ### UMich MADS SIADS 699 Capstone Team 8
 ---
 
-# VOO ETF Price behavior Prediction Project
+# VOO ETF Price Behavior Prediction Project
 
 ## Introduction
 
