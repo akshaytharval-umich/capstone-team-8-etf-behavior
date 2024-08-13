@@ -6,6 +6,7 @@ from utils import evaluate_model
 from plotting import plot_predictions
 
 def main(file_path, seq_length=7, epochs=20, batch_size=32, train_ratio=0.7,val_ratio=0.15):
+    """The main function to run the LSTM model pipeline"""
     # Load and preprocess the data
     data = load_data(file_path)
     scaled_data, scaler = preprocess_data(data)

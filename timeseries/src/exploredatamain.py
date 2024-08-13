@@ -4,6 +4,7 @@ from utils import *
 from plotting import *
 
 def main():
+    """This funtion to runt he EDA for the time series"""
     # Load the data
     file_path = 'data/voo_historical_data.csv' 
     df = load_data(file_path)

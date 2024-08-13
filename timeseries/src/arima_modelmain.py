@@ -4,6 +4,8 @@ from utils import *
 from plotting import *
 from model import *
 
+"""This below process runs the ARIMA model pipeline"""
+
 file_path = 'data/voo_historical_data.csv' 
 df = load_data(file_path)
     

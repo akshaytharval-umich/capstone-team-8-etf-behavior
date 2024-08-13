@@ -40,14 +40,14 @@ def create_sequences(data, seq_length):
 
 
 def series_data(df, start_year=None, end_year=None):
-    # Ensure 'Date' column is in datetime format
+    """Filter and format the series data."""
     df['Date'] = pd.to_datetime(df['Date'], utc=True)
     df['Date'] = df['Date'].apply(lambda x: x.strftime('%Y-%m-%d'))
-    # Drop unused columns
+    
     columns_to_drop = ['Open', 'High', 'Low', 'Volume', 'Dividends', 'Stock Splits', 'Capital Gains']
     df = df.drop(columns=[col for col in columns_to_drop if col in df.columns], axis=1)
     df['Date'] = pd.to_datetime(df['Date'])
-    # Filter data within the specified year range
+    
     if start_year is not None and end_year is not None:
         filtered_data = df[(df['Date'].dt.year >= start_year) & (df['Date'].dt.year <= end_year)]
     else:

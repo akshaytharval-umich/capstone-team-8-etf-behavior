@@ -33,15 +33,18 @@ def train_model(model, X_train, y_train,X_val, y_val, epochs, batch_size):
 
 
 def fit_arima_model(series, order=(5, 0, 5)):
+    """Fit an ARIMA model to the series."""
     model = ARIMA(series, order=order)
     model_fit = model.fit()
     return model_fit
 
 def forecast_arima_model(model_fit, steps=5):
+    """Forecast using the ARIMA model."""
     forecast = model_fit.forecast(steps=steps)
     return forecast
 
 def evaluate_arima_model(test_series, predictions):
+    """Evaluate the ARIMA model."""
     mse = mean_squared_error(test_series, predictions)
     rmse = np.sqrt(mse)
     return mse, rmse

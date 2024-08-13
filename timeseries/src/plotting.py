@@ -24,6 +24,7 @@ def plot_predictions(y_actual, y_predicted, title):
 
 
 def plot_rolling_stats(series, rolling_mean, rolling_std, wd_size, title):
+    """Plot rolling statistics."""
     fig, ax = plt.subplots(figsize=(16, 8))
     ax.plot(series, label="Original")
     ax.plot(pd.Series(rolling_mean, index=series.index), label="Rolling Mean")
@@ -36,6 +37,7 @@ def plot_rolling_stats(series, rolling_mean, rolling_std, wd_size, title):
 
 
 def plot_closing_prices(series):
+    """Plot historical closing prices."""
     plt.figure(figsize=(14, 7))
     plt.plot(series.index, series.values, label='Close Price')
     plt.title('VOO Historical Closing Prices')
@@ -48,6 +50,7 @@ def plot_closing_prices(series):
     plt.show()
 
 def plot_acf_series(ser, max_lag):
+    """Plot the autocorrelation function."""
     fig, ax = plt.subplots(1, 1, figsize=(8, 6))
     plot_acf(ser, ax=ax, lags=max_lag, title="Daily VOO prices\nAutocorrelation Function")
     ax.set_xlabel("Lag")
@@ -55,7 +58,10 @@ def plot_acf_series(ser, max_lag):
     plt.show()
 
 def perform_seasonal_decomposition(series, period=252):
-    result = seasonal_decompose(series, model='multiplicative', period=period) # Assuming 252 trading days in a year
+     
+    """Perform seasonal decomposition."""
+    
+    result = seasonal_decompose(series, model='multiplicative', period=period) 
     
     # Plot the decomposition
     plt.figure(figsize=(24, 18))
@@ -65,6 +71,7 @@ def perform_seasonal_decomposition(series, period=252):
     return result.trend, result.seasonal, result.resid
 
 def plot_seasonal_components(series, trend, seasonal, residual):
+    """Plot seasonal components."""
     plt.figure(figsize=(14, 10))
 
     plt.subplot(411)
@@ -85,20 +92,6 @@ def plot_seasonal_components(series, trend, seasonal, residual):
 
     plt.tight_layout()
     plt.show()
-
-
-  
-def plot_actual_vs_predicted(actual, predicted, title):
-    plt.figure(figsize=(14, 7))
-    plt.plot(actual, label='Actual')
-    plt.plot(predicted, label='Predicted', linestyle='--')
-    plt.xlabel('Date')
-    plt.ylabel('Values')
-    plt.legend()
-    plt.xticks(rotation=45)
-    plt.title(title)
-    plt.show()
-
 
 def plot_actual_vs_predicted_vs_original(train, actual, predicted, title):
     """
@@ -134,5 +127,20 @@ def plot_actual_vs_predicted_vs_original(train, actual, predicted, title):
     
     # Display the plot
     plt.show()
+
+  
+def plot_actual_vs_predicted(actual, predicted, title):
+    """Plot actual vs predicted values."""
+    plt.figure(figsize=(14, 7))
+    plt.plot(actual, label='Actual')
+    plt.plot(predicted, label='Predicted', linestyle='--')
+    plt.xlabel('Date')
+    plt.ylabel('Values')
+    plt.legend()
+    plt.xticks(rotation=45)
+    plt.title(title)
+    plt.show()
+
+
 
  
