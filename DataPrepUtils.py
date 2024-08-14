@@ -5,6 +5,7 @@ import pandas as pd
 import re
 from datetime import datetime, timedelta
 from sklearn.metrics import confusion_matrix
+from sklearn import metrics
 
 def determine_col_lst(data):
     # get every column containing :label: and  holding
@@ -152,8 +153,11 @@ def compare_ground_truth(data_path, model_names,column_names,ground_labels):
     for model_label in model_lst:
         for ground_label in ground_labels:
             # compare both data series with sklearn, easier then by hand
-            matrix = confusion_matrix(df[ground_label],df[model_label],labels=[1,0,-1])
-            print(matrix)
+            #matrix = confusion_matrix(df[ground_label],df[model_label],labels=[1,0,-1])
+            #print(matrix)
+            print(f"{model_label}",f"{ground_label}")
+            print(f"accuracy:{metrics.accuracy_score(df[ground_label],df[model_label])}")
+            print(f"f-score:{metrics.f1_score(df[ground_label],df[model_label],average='macro')}")
 
 
 def split_frame(data_path,percent_test=None,span_test = None):
