@@ -23,7 +23,6 @@ column_names = ['abstract','lead_paragraph','full_text']
 #column_lst = utils.determine_col_lst(df)
 
 #encoded_df = utils.calc_one_hot_encode(df,column_lst)
-#print(encoded_df.columns)
 #encoded_df.to_csv("articles_encoded.csv",encoding='utf-8',index=False)
 
 # Next pre-processing before grouping

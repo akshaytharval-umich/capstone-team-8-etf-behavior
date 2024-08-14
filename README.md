@@ -58,6 +58,7 @@ This component processes financial news articles to generate summaries, assess s
    scrape('Meta')
    ```
    Repeat the process until the scraping completes. If scraping stops due to API throttling, restart the next day.
+   At the end of each run, open the datamanager.csv generated to check the progress and outstanding api calls that need to be made.
 
 #### Input:
 - Holding name from `API_Rules.py` (additional companies can be added as needed).
@@ -83,11 +84,13 @@ The generated output is stored in the dataset for further analysis or modeling.
 - tqdm
 - openai
 - HuggingFace Transformers
-- Additional custom modules: `NytScraper`, `HuggingSentiment`, `DataPrepUtils`
+- Scikit-Learn.metrics
+- Newspaper3k
+- Additional custom modules: `NytScraper`, `NytQueryBuilder`,`NytManager`, `DataManager`, `HuggingSentiment`, `DataPrepUtils`, 
 
 ### Installation:
 ```bash
-pip install pandas tqdm openai transformers
+pip install pandas tqdm openai transformers scikit-learn newspaper3k
 ```
 
 ## Setup
@@ -125,15 +128,20 @@ This project analyzes the sentiment of financial news articles using pre-trained
   
 2. **Sentiment Analysis:** 
    - Analyze the sentiment of different parts of the articles (abstract, lead_paragraph, full_text) using pre-trained NLP models.
+   - Run the following file `main_program.py` in the sentiment_analysis_huggingface directory. It will run the entire pipeline through evaluation. It may take several minutes to complete.
+   - Output: `articles_sentiment.csv`
 
 3. **Data Preparation:** 
    - Pre-process the articles by one-hot encoding, scaling vectors, time-shifting, and grouping the data.
+   - Output: `articles_encoded.csv`,`articles_scaled.csv`,`articles_shifted.csv`,`articles_grouped.csv`
 
 4. **Joining VOO ETF Data:** 
    - Combine the sentiment analysis data with VOO historical price data to assess the impact of news sentiment on price changes.
+   - Output: `articles_voo.csv`
 
 5. **Price Change Calculation:** 
    - Evaluate the price change based on specific thresholds and generate ground truth data.
+   - Output: `articles_ground_comparison.csv`
 
 6. **Evaluation:** 
    - Compare the ground truth with the model predictions and split the dataset for testing and evaluation.
