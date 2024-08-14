@@ -2,7 +2,7 @@ import requests
 import json
 import pickle
 import time
-import API_Rules
+import sentiment_analysis_huggingface.API_Rules as API_Rules
 from datetime import datetime, timedelta
 
 #---------------
