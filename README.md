@@ -1,11 +1,9 @@
-# capstone-team-8-etf-behavior
-
 ### UMich MADS SIADS 699 Capstone Team 8
 ---
-
-# VOO ETF Price Behavior Prediction Project
+# Topic: VOO ETF Price Behavior Prediction Project
 
 ## Introduction
+
 
 This project aims to predict the behavior of the VOO ETF by leveraging a dual approach: analyzing comprehensive historical time series data and performing sentiment analysis on news articles related to its top 10 holdings.
 
@@ -19,26 +17,27 @@ The main script handles the following tasks:
 - **Model Training:** Build and train the model.
 - **Prediction & Evaluation:** Make predictions and evaluate model performance.
 
-## Usage
+### Usage
+---
 
-### 1. Prepare Your Data
+#### 1. Prepare Your Data
 Place your historical data CSV file in the `data` directory. Ensure the file is named `voo_historical_data.csv`, or update the `file_path` variable in the script.
 
-### 2. Run the Main Script
+#### 2. Run the Main Script
 
-#### LSTM Model:
+##### LSTM Model:
 ```bash
 python main.py
 ```
 This will execute the LSTM model pipeline, from data loading and preprocessing to model training and evaluation.
 
-#### ARIMA Model:
+##### ARIMA Model:
 ```bash
 python arima_modelmain.py
 ```
 This will execute the ARIMA model pipeline, from data loading and preprocessing to model training and evaluation.
 
-#### Exploratory Data Analysis (EDA):
+##### Exploratory Data Analysis (EDA):
 ```bash
 python exploredatamain.py
 ```
@@ -46,10 +45,11 @@ This will execute the EDA pipeline of the time series analysis.
 
 ## Financial News Summarization and Sentiment Analysis
 
-This component processes financial news articles to generate summaries, assess sentiment towards specific companies, and evaluate the relevance of each article using the OpenAI API. The enriched dataset can be used for building a sentiment analysis model.
+For financial news articles, we have used New York Times (NYT) API to get company (or holding) specific articles. From these articles, we have performed two independent experiments, first training a huggingface model using full news articles and structured LLM summary outputs, second using off the shelf model from hugging face for sentiment analysis of leading paragraphs.
+Initial extraction of news articles from NYT API remains the same
 
 ### Extracting News Articles from the New York Times API
-
+---
 #### Setup:
 1. Clone this repository.
 2. Run the following command for the holding name of a company (holding name must be one of the companies in `API_Rules.py`):
@@ -67,61 +67,76 @@ This component processes financial news articles to generate summaries, assess s
 - CSV file with articles.
 - Helper CSV file representing news articles from which holding is extracted.
 
-## Project Overview
+### Sentiment Analysis Model using LLM summary and full articles
+---
+For this experiment, you will need to follow these steps:
+1. Extract full articles
+2. Get structured output from OpenAI's LLM
+3. Prepare data for training
+4. Make visuals (optional)
+5. Train sentiment analysis model
 
-The script reads a CSV file containing financial news articles, cleans the data by removing entries with missing text, and ensures that all entries in the `LLM_Output` column are in string format. It then processes each article with the OpenAI model to:
+#### 1. Extract full articles:
+(Assuming the above steps for Extracting News Articles from NYT API are complete)
+- Setup:
+```bash
+pip install pandas numpy newspaper3k
+```
+- Run the notebook called `Extract_News_Articles.ipynb`, change the name of the file being read if required
+- Output will be a csv file called `full_articles.csv`
 
-- Generate a five-line summary.
-- Determine sentiment (Positive/Negative) towards a specific company.
-- Assess the relevance of the article to the company.
+#### 2. Get Structured output from LLM:
+(Assuming you have the full articles from above step and column called `full_articles` in it)
+- Setup:
+```bash
+pip install pandas openai
+```
+Also replace `{YOUR_KEY}` with your actual key by following steps [here](https://github.com/openai/openai-python). For extracting information from full news articles, we just need column `full_articles` from the output csv above. Also, a manual step of adding new column `llm_output` with value `0` is needed so that if loop within script fails, it will start from where the last OpenAI call was made.
+- Run the notebook called `OpenAi_Prompt_Engineering.ipynb`. We can also add more information extraction in prompt if required. Script will make sure to save a csv file every 100 iterations.
+- Output will be a new csv file called `articles_with_llm.csv`
 
-The generated output is stored in the dataset for further analysis or modeling.
+#### 3. Prepare data for training:
+(Assuming you have run full news articles extraction and run LLM prompts on it)
+- Setup:
+```bash
+pip install pandas
+```
+Make sure to have VOO price data (available in google drive, also mentioned above on how to extract)
+`article_columns_filtered.csv` is a csv file with `pub_date` column (publishing date of the article), `full_article` column and `llm_output` column
+- Run the notebook called `Build_Sentiment_analysis_Data.ipynb` notebook
+- Output will be a new csv file called `Full_Data_Sentiment_Analysis_LLM_Output_ETF_value_Label.csv`
 
-## Requirements
+#### 4. Make Word Cloud visual:
+(Assuming you have `Full_Data_Sentiment_Analysis_LLM_Output_ETF_value_Label.csv` available)
+- Setup:
+```bash
+pip install pandas wordcloud matplotlib
+```
+- Run the script and it will save 2 images, one each for positive and negative labels
+- Output will be 2 images for positive and negative labels
 
-- Python 3.x
-- pandas
-- tqdm
-- openai
-- HuggingFace Transformers
-- Scikit-Learn.metrics
-- Newspaper3k
-- Additional custom modules: `NytScraper`, `NytQueryBuilder`,`NytManager`, `DataManager`, `HuggingSentiment`, `DataPrepUtils`, 
-
-### Installation:
+#### 5. Train sentiment analysis model:
+(Assuming you have `Full_Data_Sentiment_Analysis_LLM_Output_ETF_value_Label.csv` available)
+- Setup:
 ```bash
 pip install pandas tqdm openai transformers scikit-learn newspaper3k
 ```
-
-## Setup
-
-1. Clone this repository or download the script.
-2. Ensure you have a CSV file named `articles_full.csv` in the working directory containing a `full_article` column with the content of the articles and a `holding` column with the company names.
-3. Obtain an OpenAI API key and replace `{YOUR_KEY}` in the script with your actual API key.
-
-## Usage
-
-### 1. Run the Script
-```bash
-python financial_news_summary.py
-```
-The script will process the articles, generate summaries, sentiment, and relevance, and store the output in the `LLM_Output` column of the dataset.
-
-### Output
-
-- **LLM_Output:** This column contains the AI-generated summaries, sentiment, and relevance for each article. The output format is:
-  - **Summary:** <Summary of the article in 5 lines>
-  - **Overall sentiment:** <Positive or Negative>
-  - **Relevance to company:** <High, Low, or NA>
-  - **Company Name:** <Company provided>
-
+- Run `Train_Sentiment_Analysis.ipynb` notebook with following instructions
+  - You can select either `TEXT_COLUMN` or `full_articles` to be the input for model
+  - You can select any one of these models to be trained:
+      - "distilbert-base-uncased"
+      - "bert-base-uncased"
+      - "roberta-base"
+      - "albert-base-v2"
+      - "xlnet-base-cased"
+- Output will be a model trained and saved `financial_sentiment_analysis_model_{model_name}.pt`
 ---
 
-## Sentiment Analysis and VOO ETF Price Prediction
+### Sentiment Analysis and VOO ETF Price Prediction using pre-trained models
 
 This project analyzes the sentiment of financial news articles using pre-trained NLP models and evaluates the impact of these sentiments on VOO ETF price changes. The project involves several stages, from scraping and sentiment analysis to data preparation and evaluation.
 
-### Steps:
+#### Steps:
 
 1. **Scrape Financial News Articles:** 
    - Use the `NytScraper` module (not included in the provided script).
@@ -146,7 +161,7 @@ This project analyzes the sentiment of financial news articles using pre-trained
 6. **Evaluation:** 
    - Compare the ground truth with the model predictions and split the dataset for testing and evaluation.
 
-### Setup
+#### Setup
 
 1. Clone this repository or download the script.
 2. Ensure you have the required data files:
@@ -155,7 +170,7 @@ This project analyzes the sentiment of financial news articles using pre-trained
    - (Optional) `articles_sentiment.csv`, `articles_encoded.csv`, `articles_scaled.csv`, `articles_shifted.csv`, `articles_grouped.csv`: Intermediate processed files.
 3. Make sure you have the custom modules (`NytScraper`, `HuggingSentiment`, `DataPrepUtils`) available in your project directory.
 
-### Usage
+#### Usage
 
 1. **Sentiment Analysis:** 
    Uncomment the relevant sections in the script to perform sentiment analysis on the articles using different models. The script will save the results in `articles_sentiment.csv`.
@@ -169,7 +184,7 @@ This project analyzes the sentiment of financial news articles using pre-trained
 4. **Evaluation:** 
    Evaluate the ground truth against model predictions and split the data for testing.
 
-### Output
+#### Output
 
 - **articles_sentiment.csv:** Contains the sentiment analysis results.
 - **articles_encoded.csv:** One-hot encoded sentiment data.
