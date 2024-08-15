@@ -1,6 +1,6 @@
 import time
 from datetime import datetime, timedelta
-import sentiment_analysis_huggingface.API_Rules as API_Rules
+import API_Rules as API_Rules
 from dotenv import load_dotenv
 load_dotenv()
 import os

@@ -1,6 +1,6 @@
 
 import pandas as pd
-import sentiment_analysis_huggingface.API_Rules as API_Rules
+import API_Rules as API_Rules
 from datetime import datetime, timedelta
 #---------
 

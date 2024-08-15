@@ -1,0 +1,10 @@
+,ground_truth_0.1%,ground_truth_0.2%,ground_truth_0.3%,ground_truth_0.4%
+abstract:distilbert-base-uncased-finetuned-sst-2-english_Prediction,0.38742857142857146,0.32085714285714284,0.26571428571428574,0.22371428571428573
+abstract:mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis_Prediction,0.22657142857142856,0.3242857142857143,0.406,0.46914285714285714
+abstract:ProsusAI/finbert_Prediction,0.252,0.32257142857142856,0.37742857142857145,0.42828571428571427
+lead_paragraph:distilbert-base-uncased-finetuned-sst-2-english_Prediction,0.39885714285714285,0.3302857142857143,0.2742857142857143,0.2277142857142857
+lead_paragraph:mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis_Prediction,0.21285714285714286,0.3222857142857143,0.41514285714285715,0.49342857142857144
+lead_paragraph:ProsusAI/finbert_Prediction,0.21828571428571428,0.3171428571428571,0.40314285714285714,0.47514285714285714
+full_text:distilbert-base-uncased-finetuned-sst-2-english_Prediction,0.38742857142857146,0.3222857142857143,0.2651428571428571,0.22314285714285714
+full_text:mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis_Prediction,0.28,0.3362857142857143,0.3882857142857143,0.428
+full_text:ProsusAI/finbert_Prediction,0.23914285714285713,0.3191428571428571,0.394,0.44942857142857146

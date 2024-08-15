@@ -6,6 +6,7 @@ import re
 from datetime import datetime, timedelta
 from sklearn.metrics import confusion_matrix
 from sklearn import metrics
+import matplotlib.pyplot as plt
 
 def determine_col_lst(data):
     # get every column containing :label: and  holding
@@ -149,15 +150,29 @@ def compare_ground_truth(data_path, model_names,column_names,ground_labels):
             col_name = f"{source_column}:{model_name}_Prediction"
             model_lst.append(col_name)
             df[col_name] = highest_score_label.apply(parse_label)
-    # with the df
+    # with the df, create a new results dataframe
+    column_names = [column for column in column_names if 'ground_truth' in column]
+    f1_results = pd.DataFrame(index=model_lst,columns=column_names)
+    accuracy_results = pd.DataFrame(index=model_lst,columns=column_names)
+    best_acc = 0
+    best_acc_model = None
     for model_label in model_lst:
         for ground_label in ground_labels:
             # compare both data series with sklearn, easier then by hand
-            #matrix = confusion_matrix(df[ground_label],df[model_label],labels=[1,0,-1])
-            #print(matrix)
-            print(f"{model_label}",f"{ground_label}")
-            print(f"accuracy:{metrics.accuracy_score(df[ground_label],df[model_label])}")
-            print(f"f-score:{metrics.f1_score(df[ground_label],df[model_label],average='macro')}")
+            f1_score = metrics.f1_score(df[ground_label],df[model_label],average='macro')
+            f1_results.at[model_label,ground_label] = f1_score
+            accuracy = metrics.accuracy_score(df[ground_label],df[model_label])
+            accuracy_results.at[model_label,ground_label] = accuracy
+            # optimized for accuracy, best metric
+            if accuracy > best_acc:
+                best_acc = accuracy
+                best_acc_model = (ground_label,model_label)
+    f1_results.to_csv('sentiment_analysis_huggingface/f1_scores.csv',index=True)
+    accuracy_results.to_csv("sentiment_analysis_huggingface/accuracy_scores.csv",index=True)
+    # reference: https://www.w3schools.com/python/python_ml_confusion_matrix.asp
+    matrix = confusion_matrix(df[ground_label],df[model_label],labels=[1,0,-1])
+    confusion_matrix_dis = metrics.ConfusionMatrixDisplay(confusion_matrix=matrix,display_labels=['Positive','Neutral','Negative'])
+    confusion_matrix_dis.plot().figure_.savefig('sentiment_analysis_huggingface/confusion_matrix.png')
 
 
 def split_frame(data_path,percent_test=None,span_test = None):
