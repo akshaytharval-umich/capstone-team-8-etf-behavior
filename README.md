@@ -144,19 +144,15 @@ This project analyzes the sentiment of financial news articles using pre-trained
 2. **Sentiment Analysis:** 
    - Analyze the sentiment of different parts of the articles (abstract, lead_paragraph, full_text) using pre-trained NLP models.
    - Run the following file `main_program.py` in the sentiment_analysis_huggingface directory. It will run the entire pipeline through evaluation. It may take several minutes to complete.
-   - Output: `articles_sentiment.csv`
 
 3. **Data Preparation:** 
    - Pre-process the articles by one-hot encoding, scaling vectors, time-shifting, and grouping the data.
-   - Output: `articles_encoded.csv`,`articles_scaled.csv`,`articles_shifted.csv`,`articles_grouped.csv`
 
 4. **Joining VOO ETF Data:** 
    - Combine the sentiment analysis data with VOO historical price data to assess the impact of news sentiment on price changes.
-   - Output: `articles_voo.csv`
 
 5. **Price Change Calculation:** 
    - Evaluate the price change based on specific thresholds and generate ground truth data.
-   - Output: `articles_ground_comparison.csv`
 
 6. **Evaluation:** 
    - Compare the ground truth with the model predictions and split the dataset for testing and evaluation.
@@ -193,6 +189,9 @@ This project analyzes the sentiment of financial news articles using pre-trained
 - **articles_grouped.csv:** Grouped data for analysis.
 - **articles_voo.csv:** Combined sentiment and VOO data with calculated price changes.
 - **articles_ground_comparison.csv:** Evaluation results comparing ground truth with model predictions.
+- **accuracy_scores.csv:** Accuracy Scores Table of tested models and thresholds.
+- **f1_scores.csv:** F1 Scores Table of tested models and thresholds.
+- **confusion_matrix.png:** Plot of the confusion matrix of the best model.
 
 ---
 
