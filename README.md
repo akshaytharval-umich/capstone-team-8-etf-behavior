@@ -80,7 +80,7 @@ For this experiment, you will need to follow these steps:
 (Assuming the above steps for Extracting News Articles from NYT API are complete)
 - Setup:
 ```bash
-pip install pandas numpy newspaper3k
+pip install pandas numpy newspaper3k matplotlib
 ```
 - Run the notebook called `Extract_News_Articles.ipynb`, change the name of the file being read if required
 - Output will be a csv file called `full_articles.csv`
